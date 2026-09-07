@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expérience et projets — Prénom Nom</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="reg-mark reg-tl"></div>
+<div class="reg-mark reg-tr"></div>
+<div class="reg-mark reg-bl"></div>
+<div class="reg-mark reg-br"></div>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">PRÉNOM <span>NOM</span></a>
+    <nav class="menu">
+      <a href="formation.html">FORMATION</a>
+      <a href="experience.html" class="active">EXPÉRIENCE ET PROJETS</a>
+      <a href="loisirs.html">LOISIRS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h1 class="page-title">Expérience et projets</h1>
+  <p class="page-sub">Stages en entreprise et projets techniques personnels — CFD, calcul par éléments finis et dynamique du solide.</p>
+
+  <div class="divider" style="margin-top:48px;">
+    <span class="tick"></span><span class="label">PROJETS TECHNIQUES</span><span class="rule"></span>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="entry-title">Simulateur spatial 6DDL de corps rigide</span>
+      <span class="entry-meta">Mars — Août 2026</span>
+    </div>
+    <div class="entry-org">Projet académique · Python / NumPy / RK4 / Quaternions — Orléans</div>
+    <ul>
+      <li><b>Dynamique :</b> Newton-Euler, quaternions, intégrateur RK4</li>
+      <li><b>Liaisons :</b> pivot / glissière / rotule par multiplicateurs de Lagrange, stabilisation de Baumgarte et méthode de pénalité</li>
+      <li><b>Validation :</b> séquenceur événementiel, invariants physiques (énergie, moment cinétique), tests de non-régression, démonstration de l'effet Dzhanibekov</li>
+    </ul>
+    <div class="tag-row">
+      <span class="tag">Python</span>
+      <span class="tag">Dynamique du solide</span>
+      <span class="tag">RK4</span>
+    </div>
+    <!-- EDIT: remplacer le lien ci-dessous par le vrai lien du notebook Jupyter -->
+    <p style="margin-top:12px;"><a class="note-link" href="#" target="_blank" rel="noopener">→ Voir le notebook détaillé</a></p>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="entry-title">Refroidissement puce GPU par microcanaux</span>
+      <span class="entry-meta">Mars — Août 2025</span>
+    </div>
+    <div class="entry-org">Projet académique · OpenFOAM × FEniCSx × XGBoost — Orléans</div>
+    <ul>
+      <li><b>CFD :</b> 79 cas simulés (OpenFOAM), validation du nombre de Nusselt à 99,8 %</li>
+      <li><b>FEM :</b> analyse thermo-mécanique de l'interface Si/Cu (FEniCSx) — σ<sub>VM</sub> = 47 MPa, marge de sécurité ×6,4</li>
+      <li><b>ML :</b> modèle de substitution (XGBoost) pour la prédiction de la température de paroi, R² &gt; 0,99 en validation croisée</li>
+    </ul>
+    <div class="tag-row">
+      <span class="tag">OpenFOAM</span>
+      <span class="tag">FEniCSx</span>
+      <span class="tag">XGBoost</span>
+      <span class="tag">Python</span>
+    </div>
+    <!-- EDIT: remplacer le lien ci-dessous par le vrai lien du notebook Jupyter -->
+    <p style="margin-top:12px;"><a class="note-link" href="#" target="_blank" rel="noopener">→ Voir le notebook détaillé</a></p>
+  </div>
+
+  <div class="divider" style="margin-top:56px;">
+    <span class="tick"></span><span class="label">EXPÉRIENCE PROFESSIONNELLE</span><span class="rule"></span>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="entry-title">Stage méthodes et industrialisation</span>
+      <span class="entry-meta">Juin — Août 2024</span>
+    </div>
+    <div class="entry-org">Assistant ingénieur @ Saint-Gobain SULLY — Sully-sur-Loire, Loiret</div>
+    <ul>
+      <li>Modification de la méthode de production pour des pièces en acrylique</li>
+      <li>Réalisation et suivi d'essais à l'échelle industrielle</li>
+      <li>Collecte, analyse de données et interprétation des résultats</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="entry-title">Stage de fin de DUT en thermomécanique</span>
+      <span class="entry-meta">Mars — Juin 2022</span>
+    </div>
+    <div class="entry-org">Assistant de laboratoire @ Universidad del País Vasco — San Sebastian, Espagne</div>
+    <ul>
+      <li>Dimensionnement d'un système de refroidissement à eau en circuit cuivre par méthode des différences finies (implémentation native sous Excel)</li>
+      <li>Mise en place de capteurs, transmetteurs et d'un serveur</li>
+      <li>Mesure et optimisation de la consommation d'une VMC</li>
+      <li>Réalisation d'une étude énergétique du laboratoire de thermique</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="entry-title">Vendeur, temps partiel</span>
+      <span class="entry-meta">Janv. 2025 — En cours</span>
+    </div>
+    <div class="entry-org">Hennes &amp; Mauritz (H&amp;M) — Checy, Loiret</div>
+    <ul>
+      <li>Accompagnement client, gestion de caisse et mise en rayon en parallèle des études</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Prénom Nom</span>
+  <span>Orléans, France</span>
+</footer>
+
+</body>
+</html>
