@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects – Your Name</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <nav aria-label="Pages"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a></nav>
+
+  <h1>Projects</h1>
+  <p>Self-directed projects done outside of coursework.</p>
+
+  <h3>6-DOF Rigid Multibody Dynamics Simulator</h3>
+  <p class="meta">May 2026 – Aug 2026 · Python, NumPy, RK4, quaternions</p>
+  <!-- Video example: put dzhanibekov.mp4 in the folder, then remove the comment marks
+  <video class="media" src="dzhanibekov.mp4" autoplay muted loop playsinline></video>
+  -->
+  <ul class="simple">
+    <li>Dynamics: Newton–Euler equations, quaternion orientation, RK4 integrator</li>
+    <li>Constraints: pin, slider and spherical joints via Lagrange multipliers, with Baumgarte stabilization and a penalty method</li>
+    <li>Validation: event sequencer, physical invariants (energy, momentum), non-regression tests; Dzhanibekov effect demonstrated</li>
+  </ul>
+  <!-- <p><a href="https://github.com/">Code on GitHub</a></p> -->
+
+  <h3>GPU Chip Cooling via Microchannels</h3>
+  <p class="meta">Jul 2025 – Aug 2025 · Orléans, France · OpenFOAM, FEniCSx, XGBoost</p>
+  <!-- GIF example: put cooling.gif in the folder, then remove the comment marks
+  <img class="media" src="cooling.gif" alt="Temperature field in the microchannels">
+  -->
+  <ul class="simple">
+    <li>CFD: 79 cases in OpenFOAM, Nusselt number validated at 99.8%</li>
+    <li>FEA: thermomechanical analysis in FEniCSx, von Mises stress of 47 MPa, safety factor of 6.4</li>
+    <li>ML: XGBoost surrogate model predicting wall temperature, R² &gt; 0.98</li>
+  </ul>
+  <!-- <p><a href="https://github.com/">Code on GitHub</a></p> -->
+
+  <footer>Last updated: November 2026</footer>
+</div>
+</body>
+</html>
