@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Projects – ABID Usman</title>
+<title>Projects – Your Name</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,31 +12,140 @@
   <nav aria-label="Pages"><a href="index.html">Home</a><a href="projects.html" aria-current="page">Projects</a></nav>
 
   <h1>Projects</h1>
-  <p>Self-directed projects done outside of coursework.</p>
-
-  <h3>6-DOF Rigid Multibody Dynamics Simulator</h3>
-  <p class="meta">May 2026 – Aug 2026 · Python, NumPy, RK4, quaternions</p>
-  <!-- Video example: put dzhanibekov.mp4 in the folder, then remove the comment marks
-  <video class="media" src="dzhanibekov.mp4" autoplay muted loop playsinline></video>
-  -->
-  <ul class="simple">
-    <li>Dynamics: Newton–Euler equations, quaternion orientation, RK4 integrator</li>
-    <li>Constraints: pin, slider and spherical joints via Lagrange multipliers, with Baumgarte stabilization and a penalty method</li>
-    <li>Validation: event sequencer, physical invariants (energy, momentum), non-regression tests; Dzhanibekov effect demonstrated</li>
+  <p>Self-directed projects done outside of coursework. Each one is described by its context, the challenge it raised, the results and my analysis.</p>
+  <ul class="sommaire">
+    <li><a href="#rigid-body">6-DOF Rigid Multibody Dynamics Simulator</a> (2026)</li>
+    <li><a href="#microchannels">GPU Chip Cooling via Microchannels</a> (2025)</li>
   </ul>
-  <!-- <p><a href="https://github.com/">Code on GitHub</a></p> -->
 
-  <h3>GPU Chip Cooling via Microchannels</h3>
-  <p class="meta">Jul 2025 – Aug 2025 · Orléans, France · OpenFOAM, FEniCSx, XGBoost</p>
-  <!-- GIF example: put cooling.gif in the folder, then remove the comment marks
-  <img class="media" src="cooling.gif" alt="Temperature field in the microchannels">
-  -->
-  <ul class="simple">
-    <li>CFD: 79 cases in OpenFOAM, Nusselt number validated at 99.8%</li>
-    <li>FEA: thermomechanical analysis in FEniCSx, von Mises stress of 47 MPa, safety factor of 6.4</li>
-    <li>ML: XGBoost surrogate model predicting wall temperature, R² &gt; 0.98</li>
-  </ul>
-  <!-- <p><a href="https://github.com/">Code on GitHub</a></p> -->
+  <!-- ================================================================= -->
+  <section class="projet" id="rigid-body">
+    <h2>6-DOF Rigid Multibody Dynamics Simulator</h2>
+    <p class="meta">May 2026 – Aug 2026 · Individual project · Python, NumPy, RK4, quaternions, pytest</p>
+
+    <div class="deux">
+      <div>
+        <h3>Context</h3>
+        <p>A numerical simulator of a rigid body with six degrees of freedom (three translations, three rotations), built on my own ahead of an end-of-studies internship in aerospace numerical simulation. The goal was to cover the whole technical chain expected in that kind of role: physical modelling, validated time integration, realistic mechanical joints, event sequencing and formal testing.</p>
+        <p><strong>Method.</strong> The state of the body is its position, velocity, an orientation quaternion and its angular velocity. The dynamics follow the Newton–Euler equations, including the gyroscopic coupling ω × (Iω). Time integration uses a fourth-order Runge–Kutta scheme, written and validated on its own (exponential decay) before being applied to the full system. Joints are modelled in two ways: ball and pin joints with Lagrange multipliers and Baumgarte stabilization, and the slider joint with a penalty method (spring–damper restoring force). An event sequencer switches joints on or changes the applied forces based on a time or state condition.</p>
+      </div>
+      <div>
+        <h3>Challenge</h3>
+        <p>Writing the equations of motion is the easy part. The real difficulty is keeping the joints numerically robust once they are coupled to an explicit integrator, over thousands of time steps.</p>
+        <p>That forces a choice between two families of methods. Lagrange multipliers enforce a constraint almost exactly, but are sensitive to any inconsistency in the state. The penalty method is always bounded and robust, but only approximately satisfies the constraint. Rather than picking one by default, the project compares both explicitly and uses each where it fits best.</p>
+        <p><strong>Validation.</strong> Reusable checks on physical invariants (energy, linear and angular momentum) and non-regression tests comparing each run against reference snapshots, all automated with pytest.</p>
+      </div>
+    </div>
+
+    <h3>Results</h3>
+    <div class="deux">
+      <!-- Copy these two images from the project's assets/ folder into images/ -->
+      <figure>
+        <a href="images/dzhanibekov_effect.png"><img src="images/dzhanibekov_effect.png" alt="Angular velocity components of a freely rotating asymmetric rigid body, showing periodic flips of ωx and ωy"></a>
+        <figcaption>Free rotation of an asymmetric body (I = diag(1, 2, 3)) with no external force or torque. The periodic flips of ωx and ωy show the instability of the intermediate axis (Dzhanibekov effect), with energy conserved to within 1% over the whole run.</figcaption>
+      </figure>
+      <figure>
+        <a href="images/sequencer_demo.png"><img src="images/sequencer_demo.png" alt="Lateral deviation of the body before and after a slider joint is activated at t = 2 s"></a>
+        <figcaption>Sequencer demo: the body moves freely, then a slider joint is switched on at t = 2 s (penalty method). The lateral deviation converges exponentially to a negligible value after activation.</figcaption>
+      </figure>
+    </div>
+    <table class="chiffres">
+      <tr><th>Area</th><th>Indicator</th><th>Value</th></tr>
+      <tr><td>Integration</td><td>RK4 vs analytical solution</td><td>Error &lt; 10⁻⁶</td></tr>
+      <tr><td>Ball / pin joints (Lagrange)</td><td>Constraint drift over 5 s</td><td>&lt; 1%</td></tr>
+      <tr><td>Slider joint (penalty)</td><td>Orientation alignment after convergence</td><td>&gt; 0.9999</td></tr>
+      <tr><td>Asymmetric free rotation</td><td>Energy drift over 10 s</td><td>&lt; 1%</td></tr>
+      <tr><td>Validation</td><td>Automated test suite (pytest)</td><td>Unit + scenarios + non-regression</td></tr>
+    </table>
+
+    <h3>Analysis</h3>
+    <div class="deux">
+      <div>
+        <p><strong>Quaternion drift.</strong> Integrating dq/dt = ½ q ⊗ [0, ω] only preserves the quaternion norm to first order. The error builds up over thousands of RK4 steps and slowly corrupts the rotation, so the quaternion is now renormalized after every step.</p>
+        <p><strong>Inconsistent initial states.</strong> Lagrange multipliers only correct the constraint acceleration, not a position or velocity error that is already there. An inconsistent start produced unbounded drift whatever the integrator. Scenarios are therefore built with consistent initial conditions (r₀ = P₀ − R(q)·d, v₀ = −ω × R(q)·d), and Baumgarte stabilization (g̈ + 2αġ + β²g = 0) was tuned and validated for time steps from 0.001 to 0.005 s.</p>
+      </div>
+      <div>
+        <p><strong>Slider singularity.</strong> With Lagrange multipliers, the slider’s constraint Jacobians (built from a cross product between a body axis and its initial reference) vanish exactly at perfect alignment, which is the initial state. This diagnosis justified switching that joint to the penalty method.</p>
+        <p><strong>Switching a joint on mid-motion.</strong> Activating a Lagrange constraint on a body already moving freely caused a delayed blow-up: the incompatible angular velocity was amplified by Baumgarte until overflow after 1 to 1.5 s of apparent stability. The demo uses the penalty method instead, and the limit is documented with possible fixes (velocity projection at activation, a dedicated constrained integrator).</p>
+        <p>The main takeaway is methodological: Lagrange where accuracy matters, penalty where robustness matters, and every limit documented rather than silently worked around.</p>
+      </div>
+    </div>
+    <!-- <p><a href="https://github.com/">Source code, tests and notebooks on GitHub</a></p> -->
+  </section>
+
+  <!-- ================================================================= -->
+  <section class="projet" id="microchannels">
+    <h2>GPU Chip Cooling via Microchannels</h2>
+    <p class="meta">Jul 2025 – Aug 2025 · Individual project · Python, NumPy/SciPy, FEniCSx, scikit-learn, XGBoost</p>
+
+    <div class="deux">
+      <div>
+        <h3>Context</h3>
+        <p>A data-centre GPU such as the H100 dissipates 700 W over about 800 mm², a heat flux of roughly 875 kW/m², far beyond what a classic finned heat sink can remove. The goal was to design and numerically validate a liquid cooling system based on microchannels.</p>
+        <p><strong>Method.</strong> The project couples three approaches in five steps:</p>
+        <ol class="simple">
+          <li>Solver validation: Poiseuille velocity profile against the analytical solution (error &lt; 0.01%).</li>
+          <li>2D thermal CFD by finite differences: coupled convection–diffusion, explicit scheme marching along the channel.</li>
+          <li>Parametric sweep over channel height, pressure drop and number of channels to find a viable operating point.</li>
+          <li>Thermomechanical FEM in FEniCSx: heterogeneous Si/Cu conduction and von Mises stress.</li>
+          <li>Machine-learning surrogate (Random Forest, XGBoost) trained on 79 validated CFD runs.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Challenge</h3>
+        <p>Two constraints pull against each other: the wall temperature must stay <strong>below 85 °C</strong>, while the flow must remain <strong>laminar (Re &lt; 2000)</strong>, which is the validity condition of the physical model. Pushing more flow to cool better quickly breaks the second condition.</p>
+        <p>A single channel turned out to be physically insufficient, and the intuitive fix of shrinking it made things worse: at constant pressure drop, a smaller cross-section means less flow and more overheating.</p>
+        <p>On the structural side, silicon (2.6 ppm/K) and copper (16.5 ppm/K) expand very differently. Bonded together, this six-fold mismatch creates internal stresses that must stay well below the strength of silicon.</p>
+      </div>
+    </div>
+
+    <h3>Results</h3>
+    <figure>
+      <a href="images/microchannel_cfd.png"><img src="images/microchannel_cfd.png" alt="Temperature field in the channel, local Nusselt number along the channel, and maximum wall temperature against Reynolds number for 79 simulations"></a>
+      <figcaption>CFD: temperature field in the channel, local Nusselt number converging towards its fully developed value, and design space of the 79 simulations (maximum wall temperature vs Reynolds number, 85 °C limit in red).</figcaption>
+    </figure>
+    <div class="deux">
+      <figure>
+        <a href="images/microchannel_fem_geometry.png"><img src="images/microchannel_fem_geometry.png" alt="Two-layer Si/Cu model with heat flux applied on the GPU side"></a>
+        <figcaption>FEM model: silicon substrate and copper microchannel layer with their properties, heat flux applied on the GPU side.</figcaption>
+      </figure>
+      <table class="chiffres">
+        <tr><th>Area</th><th>Indicator</th><th>Value</th></tr>
+        <tr><td>CFD</td><td>GPU wall temperature</td><td><strong>62.2 °C</strong> (target &lt; 85 °C)</td></tr>
+        <tr><td>CFD</td><td>Retained configuration</td><td>112 parallel 50 µm channels, Re = 571</td></tr>
+        <tr><td>CFD</td><td>Nusselt, simulated vs theory</td><td>4.03 vs 4.36 (−7.6%)</td></tr>
+        <tr><td>CFD</td><td>Energy balance</td><td>0.998</td></tr>
+        <tr><td>FEM</td><td>Max von Mises stress (Si)</td><td><strong>47 MPa</strong></td></tr>
+        <tr><td>FEM</td><td>Safety factor (Si ≈ 300 MPa)</td><td>× 6.4</td></tr>
+        <tr><td>ML</td><td>XGBoost R², wall temperature</td><td>1.000</td></tr>
+        <tr><td>ML</td><td>Prediction time</td><td>&lt; 1 ms</td></tr>
+      </table>
+    </div>
+    <div class="deux">
+      <figure>
+        <a href="images/microchannel_ml.png"><img src="images/microchannel_ml.png" alt="R² of Random Forest and XGBoost for three targets, and predicted vs actual wall temperature"></a>
+        <figcaption>Surrogate models: R² per target for Random Forest and XGBoost, and predicted vs actual wall temperature.</figcaption>
+      </figure>
+      <figure>
+        <a href="images/microchannel_parametric.png"><img src="images/microchannel_parametric.png" alt="Maximum wall temperature vs pressure drop for several channel heights, and mean Nusselt number vs Reynolds number"></a>
+        <figcaption>Parametric trends: wall temperature vs pressure drop for each channel height, and mean Nusselt number vs Reynolds number.</figcaption>
+      </figure>
+    </div>
+
+    <h3>Analysis</h3>
+    <div class="deux">
+      <div>
+        <p><strong>From one channel to 112.</strong> Digging into the single-channel limit, instead of ignoring it, is what led to the multi-channel design: 112 channels in parallel keep each flow laminar while removing the full heat flux, with a wall at 62 °C. The simulated Nusselt number is 7.6% below the fully developed theoretical value, consistent with a channel where the thermal entrance region still plays a role.</p>
+        <p><strong>Debugging the CFD.</strong> Most of the effort went into making the solver trustworthy: a sign error on the pressure gradient, a wrong hydraulic diameter formula, a W/m² vs W confusion in the energy balance, and wall temperatures blowing up when shrinking the channel because a stability criterion was violated. The step size is now computed automatically with a ×5 safety margin, and a Reynolds filter keeps every dataset point in the laminar regime.</p>
+      </div>
+      <div>
+        <p><strong>FEM.</strong> The stress level (47 MPa, safety factor of 6.4) leaves a comfortable margin. Getting there meant separating the thermal load (linear form) from the stiffness (bilinear form) in FEniCSx, catching a typo in the Lamé law that produced stresses of 10¹² MPa, and adapting to API changes in dolfinx 0.11.</p>
+        <p><strong>ML, read with caution.</strong> XGBoost reaches R² = 1.00 on wall temperature, but the dataset comes from a regular parametric grid, which makes the patterns unusually easy; noisier real data would give a more realistic 0.97 to 0.99. Both models only reach R² ≈ 0.78 on the mean Nusselt number, and a neural network failed (R² &lt; 0.31) with only 79 points. The dataset is also thin at large channel heights, where most cases left the laminar regime; this is documented as a known limit rather than filtered away.</p>
+      </div>
+    </div>
+    <p><a href="microchannel-report.pdf">Full report (PDF)</a></p>
+    <!-- <p><a href="https://github.com/">Source code on GitHub</a></p> -->
+  </section>
 
   <footer>Last updated: November 2026</footer>
 </div>
