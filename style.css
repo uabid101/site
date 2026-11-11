@@ -61,3 +61,11 @@ footer{margin-top:3rem;padding-top:.75rem;border-top:1px solid var(--line);color
 @media (max-width:520px){
   .profil{flex-direction:column}
 }
+
+/* Projet simple : titre, image centrée, un paragraphe par rubrique */
+.projet-simple{max-width:46rem;margin:3rem auto 0}
+.projet-simple > h2{font-size:1.5rem;margin-top:0}
+.projet-simple figure{max-width:100%;margin:1.25rem auto 1.5rem;text-align:center}
+.projet-simple figure img{display:inline-block;width:auto;max-width:100%;max-height:30rem}
+.projet-simple figcaption{text-align:center}
+.projet-simple h3{margin:1.25rem 0 .2rem}
